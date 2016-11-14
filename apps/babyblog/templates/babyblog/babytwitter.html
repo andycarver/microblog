@@ -4,9 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>Baby Twitter</title>
 </head>
 <body>
-
+    <h1>Baby Twitter</h1>
+    <h2>Hi, {{ request.session.user.user_name }}</h2>
+    <div>
+        <a href="/logout"><button>Log Off</button></a>
+        <h3>Tweet A Baby Tweet</h3>
+        <form action="/tweet" method="POST">
+            {% csrf_token %}
+            <textarea name="new_tweet" class="tweet_field"></textarea>
+            <input type="submit" value="Baby Tweet" class="tweet_submit">
+        </form>
+        {% if messages %}
+            {% for message in messages %}
+                <h5>{{ message }}</h5>
+            {% endfor %}
+        {% endif %}
+    </div>
+    {% for tweet in tweets %}
+    <div class="tweet">
+        <h3>{{ tweet.tweet_creator.first_name }}</h3>
+        <h5>{{ tweet.created_at }}</h5>
+        <p class="tweet_content">{{ tweet.content }}</p>
+        {% if tweet.tweet_creator.id == request.session.user.user_id %}
+            <a href="/destroy/{{ tweet.id }}" class="delete_tweet"><button class="delete_button">Delete Baby Tweet</button></a>
+        {% endif %}
+    {% endfor %}
+    </div><!--  /.doodle -->
+    {% if not tweets %}
+        <p class="nothing">No Baby Tweets here...</p>
+    {% endif %}
 </body>
 </html>

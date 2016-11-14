@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from models import User, Message
+from models import User, Tweet
 
 def session_check(request):
     if 'user' in request.session:
@@ -39,11 +39,11 @@ def log_user_in(request, user):
 
     return redirect('babytwitter')
 
-def message(request):
+def tweet(request):
     if not session_check(request):
         return redirect('index')
 
-    result = Message.objects.post_message(request)
+    result = Tweet.objects.post_tweet(request)
 
     if result:
         print_errors(request, result)
@@ -54,19 +54,19 @@ def destroy(request, id):
     if not session_check(request):
         return redirect('index')
     else:
-        Message.objects.destroy_message(request, id)
+        Tweet.objects.destroy_tweet(request, id)
 
-        return redirect('wall')
+        return redirect('babytwitter')
 
 def babytwitter(request):
     if not session_check(request):
         return redirect('index')
 
     context = {
-        'messages': Message.objects.all()[::-1]
+        'tweets': Tweet.objects.all()[::-1]
     }
 
-    return render(request, 'babytwitter.html', context)
+    return render(request, 'babyblog/babytwitter.html', context)
 
 def logout(request):
     request.session.clear()
