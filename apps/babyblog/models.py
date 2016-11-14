@@ -44,24 +44,23 @@ class UserManager(models.Manager):
 
         return errors
 
-class MessageManager(models.Manager):
-    def post_message(self, request):
+class TweetManager(models.Manager):
+    def post_tweet(self, request):
         errors = []
 
-        if not request.POST['new_message']:
-            errors.append('Please write a Message!')
+        if not request.POST['new_tweet']:
+            errors.append('Please write a Baby Tweet!')
 
         else:
             creator = User.objects.get(id=request.session['user']['user_id'])
-            self.create(content=request.POST['new_message'], message_user=creator)
+            self.create(content=request.POST['new_tweet'], tweet_creator=creator)
 
         return errors
 
-    def destroy_message(self, request, id):
-        putitin = Message.objects.filter(id=id).delete()
+    def destroy_tweet(self, request, id):
+        Tweet.objects.filter(id=id).delete()
 
 
-# Create your models here.
 class User(models.Model):
     user_name = models.CharField(max_length = 50)
     email = models.CharField(max_length = 50)
@@ -69,12 +68,12 @@ class User(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-objects = UserManager()
+    objects = UserManager()
 
-class Message(models.Model):
+class Tweet(models.Model):
     content = models.CharField(max_length = 70)
-    message_user = models.ForeignKey(User, related_name = 'user_message')
+    tweet_creator = models.ForeignKey(User, related_name = 'user_tweet')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    objects = MessageManager()
+    objects = TweetManager()
