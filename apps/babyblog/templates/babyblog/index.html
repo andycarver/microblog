@@ -1,12 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+    <meta charset="utf-8">
+    <title>Baby Twitter</title>
+    {% load static %}
 </head>
+
 <body>
-  <h1>BABYBLOG</h1>
+    <div class="container">
+        <h1>Baby Twitter</h1>
+        <h2>Log In</h2>
+        <form action="login_reg" method="post">
+            {% csrf_token %}
+            <p>Email: <input type="text" name="email"></p>
+            <p>Password: <input type="password" name="password"></p>
+            <input type="hidden" name="action" value="login">
+            <input type="submit" name="submit" value="submit">
+        </form><!-- Login -->
+        <h2>Register</h2>
+        <form action="login_reg" method="post">
+            {% csrf_token %}
+            <p>User Name: <input type="text" name="user_name"></p>
+            <p>Email: <input type="text" name="email"></p>
+            <p>Password: <input type="password" name="password"></p>
+            <p>Confirm Password: <input type="password" name="confirm"></p>
+            <input type="hidden" name="action" value="register">
+            <input type="submit" name="submit" value="submit">
+        </form><!-- Registration -->
+        {% if messages %}
+            {% for message in messages %}
+                <h5>{{ message }}</h5>
+            {% endfor %}
+       {% endif %}
+    </div><!--  /.container -->
 </body>
+
 </html>
